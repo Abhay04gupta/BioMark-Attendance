@@ -1,74 +1,76 @@
-# Face Recognition Attendance System
+# BioMark-Attendance
 
-## 📌 Overview
-The **Face Recognition Attendance System** is a web-based application that utilizes facial recognition technology to automate attendance tracking. It captures images from a live video stream, detects faces, and marks attendance in real time.
+## Overview
+BioMark-Attendance is a real-time face recognition-based attendance system that uses YOLO for face detection and DeepFace for face recognition. The system captures live video from a webcam, detects faces, recognizes predefined individuals, and marks attendance accordingly.
 
-## 🎯 Features
-- 📷 **Live Camera Feed**: Displays real-time video feed for face recognition.
-- 🏷️ **Face Detection**: Detects faces and verifies identities.
-- ✅ **Automated Attendance Marking**: Marks users as **Present** or **Absent**.
-- 📝 **Attendance Record**: Displays recorded attendance on the UI.
-- 🎨 **Modern UI**: Dark-themed responsive interface.
+## Tech Stack
+- **Backend:** Flask (Python)
+- **Frontend:** HTML, CSS, JavaScript (Jinja templates)
+- **Machine Learning Models:**
+  - YOLO (for face detection)
+  - DeepFace (for face recognition)
+- **Libraries & Dependencies:**
+  - OpenCV (cv2) for image processing
+  - Ultralytics YOLO for face detection
+  - DeepFace for facial recognition
 
-## 🛠️ Tech Stack
-- **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Flask (Python)
-- **Machine Learning**: OpenCV, dlib
-- **Database**: SQLite / CSV for storing attendance
+## Features
+- **Live Face Detection:** Uses YOLO to detect faces in real time.
+- **Face Recognition:** Matches detected faces with stored identities using DeepFace.
+- **Attendance Marking:** Updates attendance status when a recognized face is detected.
+- **Automatic Image Capture & Cleanup:** Saves detected faces temporarily and removes them after processing.
+- **Reset Attendance:** Allows resetting of attendance records.
 
-## 🚀 Installation & Setup
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/Abhay04gupta/BioMark-Attendance.git
-   cd BioMark-Attendance
-   ```
-2. **Create a Virtual Environment**
-   ```bash
-   python -m venv myenv
-   source myenv/bin/activate  # On Windows: myenv\Scripts\activate
-   ```
-3. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Run the Application**
-   ```bash
-   python app.py
-   ```
-5. **Access the Web App**
-   Open your browser and go to `http://127.0.0.1:5000/`
+## Setup Instructions
+### 1. Clone the Repository
+```sh
+git clone https://github.com/Abhay04gupta/BioMark-Attendance.git
+cd BioMark-Attendance
+```
 
-## 📸 Usage
-1. Start the server and access the web app.
-2. The camera will display a **live feed**.
-3. Click the **Capture** button to record attendance.
-4. The system will detect faces and mark attendance.
-5. Check attendance records in the **right panel**.
-6. Click **Reset** to clear the attendance log.
+### 2. Create a Virtual Environment
+```sh
+python -m venv myenv
+source myenv/bin/activate  # On Windows, use: myenv\Scripts\activate
+```
 
-## 🏗️ Project Structure
+### 3. Install Dependencies
+```sh
+pip install -r requirements.txt
+```
+
+### 4. Download YOLO Face Detection Model
+Download the `yolov8n-face.pt` model and place it in the project directory.
+
+### 5. Run the Application
+```sh
+python app.py
+```
+
+### 6. Open in Browser
+Visit `http://127.0.0.1:5000/` to access the web application.
+
+## Folder Structure
 ```
 BioMark-Attendance/
-│-- static/
-│   ├── styles.css
-│-- templates/
-│   ├── index.html
-│-- app.py
-│-- requirements.txt
-│-- README.md
+│── captured_images/    # Temporarily stores detected faces
+│── database/           # Stores reference images for face recognition
+│── templates/
+│   └── index.html      # Frontend UI
+│── app.py              # Flask backend
+│── requirements.txt    # Python dependencies
+│── yolov8n-face.pt     # YOLO face detection model
 ```
 
-## 📌 To-Do / Future Enhancements
-- 🔹 Implement **face recognition using deep learning**.
-- 🔹 Integrate **database for storing past attendance records**.
-- 🔹 Add **user authentication** for secured access.
+## Future Improvements
+- Enhance accuracy by fine-tuning DeepFace models.
+- Add support for multiple users and database integration.
+- Implement a web-based dashboard for attendance reports.
+- Improve UI/UX with modern frontend frameworks.
 
-## 🤝 Contributing
-Contributions are welcome! Feel free to fork the repo, make changes, and submit a pull request.
+## Contributors
+- **Abhay Gupta** - [GitHub](https://github.com/Abhay04gupta)
 
-## 📜 License
-This project is licensed under the **MIT License**.
-
----
-💡 **Developed by [Abhay Gupta](https://github.com/Abhay04gupta)**
+## License
+This project is open-source and available under the [MIT License](LICENSE).
 
