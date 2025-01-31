@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            margin: 50;
+            padding: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Title */
+        .title {
+            font-size: 2.5rem; /* Slightly larger */
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            background: #1e1e1e;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            padding: 20px;
+        }
+
+        /* Left Side: Video & Buttons */
+        .left-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .video-frame img {
+            width: 100%;
+            max-width: 400px;
+            height: 400px; /* Matches attendance card height */
+            border-radius: 10px;
+            border: 5px solid #00ffff;
+            box-shadow: 0px 0px 10px #00ffff;
+            object-fit: cover;
+        }
+
+        /* Buttons */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+
+        /* Right Section: Attendance List */
+        .right-section {
+            flex: 1;
+            padding: 20px;
+            background: #252525;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.2);
+            overflow-y: auto;
+            max-height: 400px; /* Matches video height */
+        }
+
+        .attendance h2 {
+            color: #00ffff;
+            font-size: 1.6rem; /* Reduced from previous */
+            margin-bottom: 10px;
+        }
+
+        #attendance-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #attendance-list li {
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        /* Attendance Status */
+        .present {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            font-weight: bold;
+            border-left: 5px solid #00ff00;
+        }
+
+        .absent {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+            font-weight: bold;
+            border-left: 5px solid #ff4444;
+        }
+    </style>
+    <script>
+        function captureImage() {
+            fetch('/capture', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("attendance-list").innerHTML = formatAttendance(data.attendance);
+                });
+        }
+
+        function resetAttendance() {
+            fetch('/reset_attendance', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("attendance-list").innerHTML = formatAttendance(data.attendance);
+                });
+        }
+
+        function formatAttendance(attendance) {
+            let html = "<ul>";
+            for (const [name, status] of Object.entries(attendance)) {
+                html += `<li class="${status === 1 ? 'present' : 'absent'}">${name}: ${status === 1 ? "Present ✅" : "Absent ❌"}</li>`;
+            }
+            return html + "</ul>";
+        }
+    </script>
+</head>
+<body>
+    <!-- Title -->
+    <div class="title">BioMark Attendance</div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Side: Video & Controls -->
+        <div class="left-section">
+            <div class="video-frame">
+                <img src="{{ url_for('video_feed') }}" alt="Video Stream">
+            </div>
+            <div class="controls">
+                <button class="btn capture" onclick="captureImage()">Capture</button>
+                <button class="btn reset" onclick="resetAttendance()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Right Side: Attendance List -->
+        <div class="right-section">
+            <div class="attendance">
+                <h2>Attendance Record</h2>
+                <div id="attendance-list">
+                    <ul>
+                        {% for name, status in attendance.items() %}
+                            <li class="{% if status == 1 %}present{% else %}absent{% endif %}">{{ name }}: {{ "Present ✅" if status == 1 else "Absent ❌" }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
